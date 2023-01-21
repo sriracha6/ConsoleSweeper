@@ -1,17 +1,45 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 
 namespace ConsoleSweeper
 {
     public class MinesweeperBoard
     {
-        bool[,] brd;
+        public int Width { get; }
+        public int Height { get; }
+        public int MineCount { get; }
+
+        public bool[,] Mines;
+        public bool[,] Flags;
+        public bool[,] Opened;
+        
+        public int GetCellNeighborMineCount(int x, int y)
+        {
+            int total = 0;
+            for(int i = -1; i <= 1; i++)
+            {
+                for(int j = -1; j <= 1; j++)
+                {
+                    if (Mines[Math.Clamp(x + i,0,Width), Math.Clamp(y + i,0,Height)])
+                        total++;
+                }
+            }
+            return total;
+        }
 
         public MinesweeperBoard(int width, int height, int mines)
         {
             if (mines >= width * height) throw new ArgumentOutOfRangeException();
-            brd = new bool[width, height];
-
+            
+            Mines = new bool[width, height];
+            Flags = new bool[width, height];
+            Opened = new bool[width, height];
+            
+            Width = width;
+            Height = height;
+            MineCount = mines;
+            
             Random rnd = new Random();
 
             for(int i = 0; i < mines; i++)
@@ -20,9 +48,9 @@ namespace ConsoleSweeper
                 {
                     int x = rnd.Next(0, width);
                     int y = rnd.Next(0, height);
-                    if (!brd[x,y])
+                    if (!Mines[x,y])
                     {
-                        brd[x, y] = true;
+                        Mines[x, y] = true;
                         break;
                     }
                 }
