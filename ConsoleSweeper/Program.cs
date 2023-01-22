@@ -35,7 +35,7 @@ namespace ConsoleSweeper
                 if (key == ConsoleKey.O) Game.Click(board, cpos);
                 if (key == ConsoleKey.P) Game.PowerClick(board, cpos);
 
-                Renderer.Render(board);
+                Renderer.Render(Game.ActiveBoard);
             }
         }
     }

@@ -44,7 +44,8 @@ namespace ConsoleSweeper
 
 		public static void Click(MinesweeperBoard board, (int x, int y) pos)
 		{
-			if (board.Mines[pos.x, pos.y]) GameSetup.End();
+			if (board.Flags[pos.x, pos.y]) return;
+			if (board.Mines[pos.x, pos.y]) { GameSetup.End(); return; }
 			board.Opened[pos.x, pos.y] = true;
 			CheckedPositions = new List<(int x, int y)>();
             FloodOpen(board, pos.x, pos.y);

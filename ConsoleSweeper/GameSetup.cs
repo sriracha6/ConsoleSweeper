@@ -15,6 +15,8 @@ namespace ConsoleSweeper
                 Game.ActiveBoard = NewGame();
                 Game.DoTimer = true;
                 Game.BestTime = Highscores.GetHighScore(Game.ActiveBoard);
+                Console.Clear();
+                ;
             }
             else Environment.Exit(0);
         }
@@ -39,9 +41,9 @@ namespace ConsoleSweeper
                 Game.ActiveBoard = NewGame();
                 Game.DoTimer = true;
                 Game.BestTime = Highscores.GetHighScore(Game.ActiveBoard);
+                Console.Clear();
             }
             else Environment.Exit(0);
-            Console.Clear();
         }
 
         public static MinesweeperBoard NewGame()
