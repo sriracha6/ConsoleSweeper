@@ -58,6 +58,15 @@ namespace ConsoleSweeper
             return total;
         }
 
+        public int GetNumberOfUnopenedCells()
+        {
+            int total = 0;
+            for (int x = 0; x < Width; x++)
+                for (int y = 0; y < Height; y++)
+                    if (!Opened[x, y]) total++;
+            return total;
+        }
+
         public MinesweeperBoard(int width, int height, int mines)
         {
             if (mines >= width * height) throw new ArgumentOutOfRangeException();

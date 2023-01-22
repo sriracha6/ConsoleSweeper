@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Security.Cryptography.X509Certificates;
 
 namespace ConsoleSweeper
@@ -8,8 +9,11 @@ namespace ConsoleSweeper
 		public static (int x, int y) CursorPosition = (0, 0);
 		public static int FlagsPlacedCount;
 		public static int Timer;
+		public static bool DoTimer;
+		public static int BestTime;
+		public static MinesweeperBoard ActiveBoard;
 
-		static List<(int x, int y)> CheckedPositions;
+        static List<(int x, int y)> CheckedPositions;
 
 		public static (int number, ConsoleColor color)[] ColorNumberCodes = {
 			(0,ConsoleColor.White),
@@ -25,29 +29,39 @@ namespace ConsoleSweeper
 
 		public static void TimerThread()
 		{
-			Thread.Sleep(1000);
-			Timer++;
+			while(true)
+				TimerTick();
 		}
+
+		static void TimerTick()
+		{
+			if(DoTimer)
+			{
+				Thread.Sleep(1000);
+				Timer++;
+			}
+        }
 
 		public static void Click(MinesweeperBoard board, (int x, int y) pos)
 		{
-			if (board.Mines[pos.x, pos.y]) End();
+			if (board.Mines[pos.x, pos.y]) GameSetup.End();
 			board.Opened[pos.x, pos.y] = true;
 			CheckedPositions = new List<(int x, int y)>();
             FloodOpen(board, pos.x, pos.y);
-		}
+			if (board.GetNumberOfUnopenedCells() == board.MineCount) GameSetup.Win();
+        }
 
-		public static void PowerClick(MinesweeperBoard board, (int x, int y) pos)
+        public static void PowerClick(MinesweeperBoard board, (int x, int y) pos)
 		{
             if (board.GetCellNeighborFlagCount(pos.x, pos.y) != board.Numbers[pos.x, pos.y]) return;
 
 			for(int i = -1; i <= 1; i++)
 				for(int j = -1; j <= 1; j++)
-					if (!board.Flags[pos.x+i,pos.y+j])
+					if (InBounds(board, pos.x+i,pos.y+j) && !board.Flags[pos.x+i,pos.y+j])
 						Click(board, (pos.x+i, pos.y+j));
-		}
+        }
 
-		public static bool InBounds(MinesweeperBoard board, int x, int y)
+        public static bool InBounds(MinesweeperBoard board, int x, int y)
 		{
 			return !((x >= board.Width) || (x < 0) || (y >= board.Height) || (y < 0));
         }
@@ -65,17 +79,13 @@ namespace ConsoleSweeper
 					if (!InBounds(board, x + i, y + j)) continue;
 					else board.Opened[x + i, y + j] = true;
 
-			FloodOpen(board, x + 1, y + 1);
+			/*FloodOpen(board, x + 1, y + 1);
 			FloodOpen(board, x - 1, y - 1);
 			FloodOpen(board, x - 1, y + 1);
-			FloodOpen(board, x + 1, y - 1);
+			FloodOpen(board, x + 1, y - 1);*/
+			for(int i = -1; i<=1; i++)
+				for(int j = -1; j<=1; j++)
+					FloodOpen(board,x+i,y+j);
 		}
-
-		public static void End()
-		{
-			Console.Clear();
-			Console.WriteLine("You lose.");
-			while (true) { }
-		}
-	}
+    }
 }

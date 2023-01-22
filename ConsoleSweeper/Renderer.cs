@@ -25,7 +25,7 @@ namespace ConsoleSweeper
 			}
             Console.ResetColor();
             Console.Write('\n');
-			Console.WriteLine($"Flags: {board.GetTotalFlagCount()} | Mines: {board.MineCount} | {Game.Timer} | {board.Width}x{board.Height} | {Game.CursorPosition}");
+			Console.WriteLine($"Flags: {board.GetTotalFlagCount()} | Mines: {board.MineCount} | {Game.Timer} Best: {Game.BestTime} | {board.Width}x{board.Height} | {Game.CursorPosition}");
 		}
 	}
 }
