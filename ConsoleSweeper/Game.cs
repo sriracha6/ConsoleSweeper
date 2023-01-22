@@ -39,11 +39,12 @@ namespace ConsoleSweeper
 
 		public static void PowerClick(MinesweeperBoard board, (int x, int y) pos)
 		{
-			if (board.GetCellNeighborFlagCount(pos.x, pos.y) != board.Numbers[pos.x, pos.y]) return;
+            if (board.GetCellNeighborFlagCount(pos.x, pos.y) != board.Numbers[pos.x, pos.y]) return;
 
 			for(int i = -1; i <= 1; i++)
 				for(int j = -1; j <= 1; j++)
-					Click(board, pos);
+					if (!board.Flags[pos.x+i,pos.y+j])
+						Click(board, (pos.x+i, pos.y+j));
 		}
 
 		public static bool InBounds(MinesweeperBoard board, int x, int y)
