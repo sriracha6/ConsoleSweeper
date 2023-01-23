@@ -11,13 +11,7 @@ namespace ConsoleSweeper
             Console.WriteLine("Press [ n ] to start a new game and [ q ] to quit.");
             var key = Console.ReadKey().Key;
             if (key == ConsoleKey.N)
-            {
-                Game.ActiveBoard = NewGame();
-                Game.DoTimer = true;
-                Game.BestTime = Highscores.GetHighScore(Game.ActiveBoard);
-                Console.Clear();
-                ;
-            }
+                CreateNew();
             else Environment.Exit(0);
         }
 
@@ -37,13 +31,17 @@ namespace ConsoleSweeper
             Console.WriteLine("Press [ n ] to start a new game and [ q ] to quit.");
             var key = Console.ReadKey().Key;
             if (key == ConsoleKey.N)
-            {
-                Game.ActiveBoard = NewGame();
-                Game.DoTimer = true;
-                Game.BestTime = Highscores.GetHighScore(Game.ActiveBoard);
-                Console.Clear();
-            }
+                CreateNew();
             else Environment.Exit(0);
+        }
+
+        public static void CreateNew()
+        {
+            Game.ActiveBoard = NewGame();
+            Game.DoTimer = true;
+            Game.BestTime = Highscores.GetHighScore(Game.ActiveBoard);
+            Game.CursorPosition = (0, 0);
+            Console.Clear();
         }
 
         public static MinesweeperBoard NewGame()
